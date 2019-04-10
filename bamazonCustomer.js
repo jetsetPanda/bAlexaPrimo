@@ -1,6 +1,6 @@
 const inquirer = require('inquirer');
 const mysql = require('mysql');
-const fancyline = "----------------------------------------------------------------";
+const fancyline = "------------------------------------------------------------------------------------";
 const connection = mysql.createConnection({
     host: '127.0.0.1',
     user: 'root',
@@ -16,13 +16,26 @@ function start() {
     connection.query('SELECT * FROM products', (error, res) => {
         if (error) throw error;
 
-        console.log(`\nBamazon Prime Menu: \n`);
-        console.log(fancyline);
+        // console.log("     _   _   _   _   _   _   _     _   _   _   _   _");  
+        // console.log("    / \\ / \\ / \\ / \\ / \\ / \\ / \\   / \\ / \\ / \\ / \\ / \\"); 
+        // console.log("   ( B | a | m | a | z | o | n ) ( P | r | i | m | o )");
+        // console.log("    \\_/ \\_/ \\_/ \\_/ \\_/ \\_/ \\_/   \\_/ \\_/ \\_/ \\_/ \\_/"); 
+
+        console.log("    __                                                          _");                
+        console.log("   / /_  ____ _____ ___  ____ _____  ____  ____     ____  _____(_)___ ___  ____"); 
+        console.log("  / __ \\/ __ `/ __ `__ \\/ __ `/_  / / __ \\/ __ \\   / __ \\/ ___/ / __ `__ \\/ __ \\");
+        console.log(" / /_/ / /_/ / / / / / / /_/ / / /_/ /_/ / / / /  / /_/ / /  / / / / / / / /_/ /");
+        console.log("/_.___/\\__,_/_/ /_/ /_/\\__,_/ /___/\\____/_/ /_/  / .___/_/  /_/_/ /_/ /_/\\____/"); 
+        console.log("                                                /_/");                             
+        
+        console.log("\n" + fancyline);
+        console.log("\nWelcome to Bamazon Primo, I am your virtual assistant Balexa. Here are our offerings:")
+        console.log("\n" + fancyline + "\n");
         res.forEach(row => {
-            console.log(`Id #${row.item_id} \| Product: ${row.product_name} \| Price: ${row.price}`); 
+            console.log(`Product Id: ${row.item_id}  \| Item: ${row.product_name} \| ($${row.price})`); 
             // \| Department: ${row.department_name} \| No. in Stock: ${row.stock_quantity}`);
         });
-        console.log(fancyline);
+        console.log(fancyline + "\n");
         userPrompts();
     })
 };
@@ -30,12 +43,12 @@ function start() {
 const userPrompts = () => {
     inquirer.prompt([
         {
-            message: "What is the ID of the product you'd like to buy?",
+            message: "Balexa >>> What is the ID of the product you'd like to buy? >>> ",
             type: "input",
             name: "inputID"
         },
         {
-            message: "How many units of this product would you like to buy?",
+            message: "Balexa >>> How many of this item would you like to buy? >>>",
             type: "input",
             name: "inputQty"
         }
@@ -63,7 +76,8 @@ function getProduct(inputID, inputQty) {
             fulfillOrder(product, inputID, inputQty);
             connection.end();
         } else {
-            console.log("Oops! We are unable to fulfill your order: Insufficient Quantity.");
+            console.log(`\n${fancyline}\n\n! Balexa >>> Oops! We are unable to fulfill your order: Insufficient Quantity.`);
+            console.log(`\n! Bbezos >>> Psst, try ordering less of this or buy a different product.. BUY BUY BABY! :D \n\n${fancyline}`);
             connection.end();
         }
     })
@@ -79,5 +93,6 @@ const fulfillOrder = (product, inputID, inputQty) => {
 
     connection.query(queryDos,[billAmt, {item_id: inputID }], (error, res) => {});
 
-    console.log(`BTW, your total is ${billAmt} okurrr`);
+    console.log(`\n${fancyline}\n\n* Balexa >>> Your order total: $${billAmt}. Payable in USD or BTC Thx!`);
+    console.log(`\n* Bbezos >>> Thanks for your purchase! Mmm money! :D\n\n${fancyline}`);
 }
